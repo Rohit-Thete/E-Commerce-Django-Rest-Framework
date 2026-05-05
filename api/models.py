@@ -53,6 +53,10 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10,decimal_places=2)
 
+    @property
+    def item_subtotal(self):
+        return self.quantity * self.price
+
     def __str__(self):
         return f"{self.order} - {self.product} - {self.quantity} - {self.price}"
 
