@@ -10,14 +10,14 @@ def create_order(user,items):
         order = Order.objects.create(user = user,total_bill = 0)
 
         for item in items:
-            product = item["product"]
+            product = Product.objects.select_for_update().get(id=item["product"].id)
             quantity = item["quantity"]
             price = product.price
 
             # TODO: use select for update to lock the product row to prevent race conditions
             # TODO: How client know which item out of stock?
             if product.stock < quantity:
-                raise ValidationError({"error":"available stock is less than required Quantity"})
+                raise ValidationError({"error":f"available stock for {product.name} is less than required Quantity"})
             
             obj = OrderItem.objects.create(
                 order = order,
@@ -26,15 +26,15 @@ def create_order(user,items):
                 price = price
             )
             # TODO: use item_subtotal
-            total += quantity * price
+            total += obj.item_subtotal
 
             order.total_bill = total
             # TODO: only update total_bill field
-            order.save()
+            order.save(update_fields=["total_bill"])
 
             product.stock -= quantity
             # TODO: only update stock field
-            product.save()
+            product.save(update_fields=["stock"])
 
     return order
 
