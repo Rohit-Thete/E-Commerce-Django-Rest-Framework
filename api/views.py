@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import User, Category, Product, Order
+from django.db.models import Prefetch
+from .models import User, Category, Product, Order, OrderItem
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -144,7 +145,7 @@ class ProductView(APIView):
         return Response(serializer.errors, status=400)
 
     def get(self, request):
-        products = Product.objects.all()
+        products = Product.objects.select_related("category")
         serializer = ProductReadSerializer(products, many=True)
 
         return Response(serializer.data, status=200)
@@ -186,7 +187,7 @@ class OrderView(APIView):
 
     def get(self,request):
         user = request.user
-        orders = Order.objects.filter(user = user)
+        orders = Order.objects.filter(user = user).prefetch_related(Prefetch("items", queryset=OrderItem.objects.select_related("product")))
         serializer = OrderReadSerializer(orders,many=True)
 
         return Response(serializer.data,status=200)
