@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
+    # TODO: Move outside model
     ROLE_CHOICES =(('admin','Admin'),('customer','Customer'))
     first_name = None
     last_name = None
