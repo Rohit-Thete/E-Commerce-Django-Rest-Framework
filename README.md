@@ -82,7 +82,7 @@ EMAIL_HOST_USER=your-email@example.com
 EMAIL_HOST_PASSWORD=your-email-password
 ```
 ## Settings for Production
-to use Production settings use folloeing command in terminal
+to use Production settings use following command in terminal
 ```bash
 python manage.py runserver --settings=ecommerce.settings.production
 ```
