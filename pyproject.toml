@@ -16,7 +16,6 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = []
 development = [
     "django-jazzmin>=3.0.4",
     "django-silk>=5.5.0",

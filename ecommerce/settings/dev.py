@@ -5,7 +5,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 INSTALLED_APPS += [
     "silk", 
 ]
-MIDDLEWARE = ["silk.middleware.SilkyMiddleware"] + MIDDLEWARE
+MIDDLEWARE += ["silk.middleware.SilkyMiddleware"] 
 
 DATABASES = {
     "default": {

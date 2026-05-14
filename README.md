@@ -93,7 +93,7 @@ python manage.py runserver --settings=ecommerce.settings.production
 Clone the repository and install dependencies:
 
 ```bash
-uv sync
+uv sync --no-dev --group prod
 ```
 
 If the lockfile is out of date after dependency changes, refresh it first:
