@@ -26,6 +26,25 @@ def send_order_confirmation_email(username, email, orderid):
         fail_silently=False,
     )
 
+@shared_task
+def send_order_cancellation_email(username, email, orderid):
+    send_mail(
+        subject="Order Cancellation",
+        message=f"Hello {username} your order has been cancelled with order id {orderid} you can check your order details by login in your account",
+        from_email="rohitthete.512@gmail.com",
+        recipient_list=[email],
+        fail_silently=False,
+    )
+
+@shared_task
+def send_order_delivered_email(username, email, orderid):
+    send_mail(
+        subject="Order Delivered Successfully",
+        message=f"Hello {username} your order has been delivered successfully with order id {orderid} you can check your order details by login in your account",
+        from_email="rohitthete.512@gmail.com",
+        recipient_list=[email],
+        fail_silently=False,
+    )
 
 # @shared_task
 # def send_welcome_email(username, email):
