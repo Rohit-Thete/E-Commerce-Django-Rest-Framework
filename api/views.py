@@ -86,7 +86,7 @@ class UserView(APIView):
 
 
 class CategoryView(ModelViewSet):
-    permission_classes = [IsAuthenticated, IsadminOrReadOnly]
+    permission_classes = [IsadminOrReadOnly]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -185,12 +185,13 @@ class OrderView(APIView):
         if serializer.is_valid():
             items = serializer.validated_data["items"]
             with transaction.atomic():
-                order = create_order(request.user,items)
+                order = create_order(request.user, items)
                 # send_order_confirmation_email.delay(request.user.username, request.user.email, order.id)
-                return Response({"msg":"order created","orderid":order.id},status=201)
-        
-        return Response(serializer.errors,status=400)
-    
+                return Response(
+                    {"msg": "order created", "orderid": order.id}, status=201
+                )
+
+        return Response(serializer.errors, status=400)
 
     def get(self, request):
         user = request.user

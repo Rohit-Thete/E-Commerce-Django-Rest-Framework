@@ -173,4 +173,4 @@ class OrderReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "total_bill", "items", "date_created"]
+        fields = ["id", "total_bill", "items", "created_at", "status"]

@@ -6,10 +6,11 @@ router = DefaultRouter()
 router.register("category", CategoryView, basename="category")
 
 urlpatterns = [
+    path("", include(router.urls)),
     path("register/", register),
     path("login/", login_user),
     path("user/", UserView.as_view()),
-    path("category/", include(router.urls)),
+    
     # path("category/", CategoryView.as_view()),
     # path("category/<int:pk>/", CategoryView.as_view()),
     path("product/", ProductView.as_view()),

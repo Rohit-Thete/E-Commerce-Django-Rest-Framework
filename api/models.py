@@ -60,10 +60,15 @@ class Product(AbstractBaseModel):
 class Order(AbstractBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through="OrderItem")
-    total_bill = models.DecimalField(max_digits=10, decimal_places=2)
+    total_bill = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     status = models.CharField(
         choices=OrderStatus.choices, default=OrderStatus.CONFIRMED
     )
+
+    def update_total_bill(self):
+        total = sum(item.item_subtotal for item in self.items.all())
+        self.total_bill = total
+        self.save(update_fields=["total_bill"])
 
     def __str__(self):
         return f"{self.user} - {self.created_at} - {self.status} - {self.total_bill}"
@@ -78,6 +83,17 @@ class OrderItem(AbstractBaseModel):
     @property
     def item_subtotal(self):
         return self.quantity * self.price
+
+    def save(self, *args, **kwargs):
+        if self.product_id:
+            self.price = self.product.price
+        super().save(*args, **kwargs)
+        self.order.update_total_bill()
+
+    def delete(self, *args, **kwargs):
+        order = self.order
+        super().delete(*args, **kwargs)
+        order.update_total_bill()
 
     def __str__(self):
         return f"{self.order} - {self.product} - {self.quantity} - {self.price}"
